@@ -1,5 +1,5 @@
-const fs = require('fs')
-const { Resvg } = require('@resvg/resvg-js')
+const svgToPng = require('./lib/svg-to-png');
+const fs = require('fs');
 
 const svg = fs.readFileSync('text.svg');
 const opts = {
@@ -12,7 +12,12 @@ const opts = {
     loadSystemFonts: false,
     defaultFontFamily: 'Arsenal',
   },
-}
-const resvg = new Resvg(svg, opts)
-const png = resvg.render().asPng()
-fs.writeFileSync('text-out.png', png)
+};
+
+svgToPng(svg, opts)
+  .then((png) => {
+    fs.writeFileSync('text.png', png);
+  })
+  .catch((err) => {
+    console.error(err.toString());
+  });
